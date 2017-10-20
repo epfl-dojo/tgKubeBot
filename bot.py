@@ -2,7 +2,7 @@
 # chercher quel last version de KuberNet S sur le web
 # import
 import urllib.request, json, pprint
-import pickle
+import pickle, asyncio
 
 from aiotg import Bot, Chat
 from yaml import load
@@ -30,6 +30,12 @@ def version(chat: Chat, unuse):
 @bot.command(r"/date")
 def date_v (chat: Chat, unuse):
     return chat.reply(get_last_ver()["published_at"])
+
+@bot.command(r"/flood")
+async def flood (chat: Chat, unuse):
+    for i in range(20):
+        await asyncio.sleep(2)
+        await chat.send_text("coucou")
 
 
 STATE_FILE = "./k8s.state"
