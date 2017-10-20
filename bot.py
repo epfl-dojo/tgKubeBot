@@ -4,7 +4,13 @@
 import urllib.request, json, pprint
 import pickle
 
-STATE_FILE = "./k8s.state"
+from aiotg import Bot, Chat
+from yaml import load
+
+def private_bot_token():
+    return load(open("PRIVATE.yml"))["token"]
+
+bot = Bot(api_token=private_bot_token())
 
 def get_last_ver():
     releases_json = urllib.request.urlopen("https://api.github.com/repos/kubernetes/kubernetes/releases").read()
@@ -13,14 +19,32 @@ def get_last_ver():
         if "-" not in r["tag_name"]:
             return r
 
+@bot.command(r"/echo (.+)")
+def echo(chat: Chat, match):
+    return chat.reply(match.group(1))
+
+@bot.command(r"/version")
+def version(chat: Chat, unuse):
+    return chat.reply(get_last_ver()["tag_name"])
+
+@bot.command(r"/date")
+def date_v (chat: Chat, unuse):
+    return chat.reply(get_last_ver()["published_at"])
+
+
+STATE_FILE = "./k8s.state"
+
+
 
 if __name__ == '__main__':
     try:
-        state = pickle.load(STATE_FILE)
+        state = pickle.load(open(STATE_FILE))
     except:
         state = {
-            latest : None,
+            "latest" : None,
         }
     latest = get_last_ver()
     print("Latest version is : %s" % latest['tag_name'])
     print(latest['body'])
+
+    bot.run()

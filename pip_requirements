@@ -1,0 +1,11 @@
+aiohttp==2.3.1
+aiotg==0.9.4
+argh==0.26.2
+async-timeout==2.0.0
+chardet==3.0.4
+multidict==3.3.0
+pathtools==0.1.2
+pkg-resources==0.0.0
+PyYAML==3.12
+watchdog==0.8.3
+yarl==0.13.0
